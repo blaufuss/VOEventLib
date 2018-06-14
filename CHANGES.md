@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.dev0 (unreleased)
+## 1.1 (2018-06-14)
 
 -   Ported to Python 3 / Dropp Python 2 support entirely
 
