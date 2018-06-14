@@ -22,137 +22,136 @@ Examples:
     python format_to_html.py -s -o outfile2.html input_event_file.xml
 
 """
-
 # Copyright 2010 Roy D. Williams and Dave Kuhlmann
 
 
 import sys
 import os
 import getopt
-import VOEventLib.VOEvent
-import VOEventLib.Vutil
+from VOEventLib import VOEvent
+from VOEventLib import Vutil
 
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 
 def display(source, o=sys.stdout):
     '''Generate HTML that provides a display of an event.
     '''
-    v = VOEventLib.Vutil.parse(source)
-    print>>o, '<html>'
-    print>>o, '<h2>VOEvent</h2>'
-    print>>o, 'IVORN <i>%s</i><br/>' % v.get_ivorn()
-    print>>o, '(role is %s)' % v.get_role()
+    v = Vutil.parse(source)
+    print('<html>', file=o)
+    print('<h2>VOEvent</h2>', file=o)
+    print('IVORN <i>%s</i><br/>' % v.get_ivorn(), file=o)
+    print('(role is %s)' % v.get_role(), file=o)
 
-    print>>o, '<p>Event description: %s</p>\n' % v.get_Description()
+    print('<p>Event description: %s</p>\n' % v.get_Description(), file=o)
 
     r = v.get_Reference()
     if r:
-        print>>o, 'Reference<br/>Name=%s, Type=%s, uri=%s' \
-                    % (r.get_name(), r.get_type(), r.get_uri())
-    print>>o, '<h3>Who</h3>'
+        print('Reference<br/>Name=%s, Type=%s, uri=%s' \
+                    % (r.get_name(), r.get_type(), r.get_uri()), file=o)
+    print('<h3>Who</h3>', file=o)
     who = v.get_Who()
     a = who.get_Author()
-    print>>o, 'Title: %s'                        % VOEventLib.Vutil.htmlList(a.get_title())
-    print>>o, 'Name: %s'                         % VOEventLib.Vutil.htmlList(a.get_contactName())
-    print>>o, 'Email: %s'                        % VOEventLib.Vutil.htmlList(a.get_contactEmail())
-    print>>o, 'Phone: %s'                        % VOEventLib.Vutil.htmlList(a.get_contactPhone())
-    print>>o, 'Contributor: %s<br/>'             % VOEventLib.Vutil.htmlList(a.get_contributor())
-    print>>o, '<h3>What</h3>'
-    print>>o, '<h4>Params</h4>'
-    print>>o, '<table border="1"><tr>'
-    print>>o, '<td>Group</td>'
-    print>>o, '<td>Name</td>'
-    print>>o, '<td>Description</td>'
-    print>>o, '<td><b>Value</b></td>'
-    print>>o, '<td>ucd</td>'
-    print>>o, '<td>unit</td>'
-    print>>o, '<td>dataType</td>'
-    print>>o, '</tr>'
+    print('Title: %s'                        % Vutil.htmlList(a.get_title()), file=o)
+    print('Name: %s'                         % Vutil.htmlList(a.get_contactName()), file=o)
+    print('Email: %s'                        % Vutil.htmlList(a.get_contactEmail()), file=o)
+    print('Phone: %s'                        % Vutil.htmlList(a.get_contactPhone()), file=o)
+    print('Contributor: %s<br/>'             % Vutil.htmlList(a.get_contributor()), file=o)
+    print('<h3>What</h3>', file=o)
+    print('<h4>Params</h4>', file=o)
+    print('<table border="1"><tr>', file=o)
+    print('<td>Group</td>', file=o)
+    print('<td>Name</td>', file=o)
+    print('<td>Description</td>', file=o)
+    print('<td><b>Value</b></td>', file=o)
+    print('<td>ucd</td>', file=o)
+    print('<td>unit</td>', file=o)
+    print('<td>dataType</td>', file=o)
+    print('</tr>', file=o)
     g = None
     params = v.get_What().get_Param()
     for p in params:
-        print>>o, '<tr>' + VOEventLib.Vutil.htmlParam(g, p) + '</tr>'
+        print('<tr>' + Vutil.htmlParam(g, p) + '</tr>', file=o)
 
     groups = v.get_What().get_Group()
     for g in groups:
         for p in g.get_Param():
-            print>>o, '<tr>' + VOEventLib.Vutil.htmlParam(g, p) + '</tr>'
-    print>>o, '</table>'
-    print>>o, '<h4>Tables</h4>'
+            print('<tr>' + Vutil.htmlParam(g, p) + '</tr>', file=o)
+    print('</table>', file=o)
+    print('<h4>Tables</h4>', file=o)
     tables = v.get_What().get_Table()
     for t in tables:
-        print>>o, '<table border="1">'
+        print('<table border="1">', file=o)
 
-        print>>o, '<tr><td><i>Name</i></td>'
+        print('<tr><td><i>Name</i></td>', file=o)
         for f in t.get_Field():
-            print>>o, '<td>' + str(f.get_name()) + '</td>'
-        print>>o, '</tr>'
+            print('<td>' + str(f.get_name()) + '</td>', file=o)
+        print('</tr>', file=o)
 
-        print>>o, '<tr><td><i>UCD</i></td>'
+        print('<tr><td><i>UCD</i></td>', file=o)
         for f in t.get_Field():
-            print>>o, '<td>' + str(f.get_ucd()) + '</td>'
-        print>>o, '</tr>'
+            print('<td>' + str(f.get_ucd()) + '</td>', file=o)
+        print('</tr>', file=o)
 
-        print>>o, '<tr><td><i>unit</i></td>'
+        print('<tr><td><i>unit</i></td>', file=o)
         for f in t.get_Field():
-            print>>o, '<td>' + str(f.get_unit()) + '</td>'
-        print>>o, '</tr>'
-        print>>o, '<tr><td><i>dataType</i></td>'
+            print('<td>' + str(f.get_unit()) + '</td>', file=o)
+        print('</tr>', file=o)
+        print('<tr><td><i>dataType</i></td>', file=o)
         for f in t.get_Field():
-            print>>o, '<td>' + str(f.get_dataType()) + '</td>'
-        print>>o, '</tr>'
-        print>>o, '<tr><td/></tr>'
+            print('<td>' + str(f.get_dataType()) + '</td>', file=o)
+        print('</tr>', file=o)
+        print('<tr><td/></tr>', file=o)
         d = t.get_Data()
         if d:
             for tr in d.get_TR():
-                print>>o, '<tr><td/>'
+                print('<tr><td/>', file=o)
                 for td in tr.get_TD():
-                    print>>o, '<td>' + td + '</td>'
-                print>>o, '</tr>'
-        print>>o, '</table>'
-    print>>o, '<h3>WhereWhen</h3>'
-    wwd = VOEventLib.Vutil.getWhereWhen(v)
+                    print('<td>' + td + '</td>', file=o)
+                print('</tr>', file=o)
+        print('</table>', file=o)
+    print('<h3>WhereWhen</h3>', file=o)
+    wwd = Vutil.getWhereWhen(v)
     if wwd:
-        print>>o, '<table border="1">'
-        print>>o, '<tr><td>Observatory</td> <td>%s</td></tr>' % wwd['observatory']
-        print>>o, '<tr><td>Coord system</td><td>%s</td></tr>' % wwd['coord_system']
-        print>>o, '<tr><td>Time</td>                <td>%s</td></tr>' % wwd['time']
-        print>>o, '<tr><td>Time error</td>  <td>%s</td></tr>' % wwd['timeError']
-        print>>o, '<tr><td>RA</td>                  <td>%s</td></tr>' % wwd['longitude']
-        print>>o, '<tr><td>Dec</td>                 <td>%s</td></tr>' % wwd['latitude']
-        print>>o, '<tr><td>Pos error</td>       <td>%s</td></tr>' % wwd['positionalError']
-        print>>o, '</table>'
-    print>>o, '<h3>Why</h3>'
+        print('<table border="1">', file=o)
+        print('<tr><td>Observatory</td> <td>%s</td></tr>' % wwd['observatory'], file=o)
+        print('<tr><td>Coord system</td><td>%s</td></tr>' % wwd['coord_system'], file=o)
+        print('<tr><td>Time</td>                <td>%s</td></tr>' % wwd['time'], file=o)
+        print('<tr><td>Time error</td>  <td>%s</td></tr>' % wwd['timeError'], file=o)
+        print('<tr><td>RA</td>                  <td>%s</td></tr>' % wwd['longitude'], file=o)
+        print('<tr><td>Dec</td>                 <td>%s</td></tr>' % wwd['latitude'], file=o)
+        print('<tr><td>Pos error</td>       <td>%s</td></tr>' % wwd['positionalError'], file=o)
+        print('</table>', file=o)
+    print('<h3>Why</h3>', file=o)
     w = v.get_Why()
     if w:
         if w.get_Concept():
-            print>>o, "Concept: %s" % VOEventLib.Vutil.htmlList(w.get_Concept())
+            print("Concept: %s" % Vutil.htmlList(w.get_Concept()), file=o)
         if w.get_Name():
-            print>>o, "Name: %s"        % VOEventLib.Vutil.htmlList(w.get_Name())
+            print("Name: %s"        % Vutil.htmlList(w.get_Name()), file=o)
 
-        print>>o, '<h4>Inferences</h4>'
+        print('<h4>Inferences</h4>', file=o)
         inferences = w.get_Inference()
         for i in inferences:
-            print>>o, '<table border="1">'
-            print>>o, '<tr><td>probability</td><td>%s</td></tr>' % i.get_probability()
-            print>>o, '<tr><td>relation</td>     <td>%s</td></tr>' % i.get_relation()
-            print>>o, '<tr><td>Concept</td>      <td>%s</td></tr>' % VOEventLib.Vutil.htmlList(i.get_Concept())
-            print>>o, '<tr><td>Description</td><td>%s</td></tr>' % VOEventLib.Vutil.htmlList(i.get_Description())
-            print>>o, '<tr><td>Name</td>             <td>%s</td></tr>' % VOEventLib.Vutil.htmlList(i.get_Name())
-            print>>o, '<tr><td>Reference</td>  <td>%s</td></tr>' % str(i.get_Reference())
-            print>>o, '</table>'
-    print>>o, '<h3>Citations</h3>'
+            print('<table border="1">', file=o)
+            print('<tr><td>probability</td><td>%s</td></tr>' % i.get_probability(), file=o)
+            print('<tr><td>relation</td>     <td>%s</td></tr>' % i.get_relation(), file=o)
+            print('<tr><td>Concept</td>      <td>%s</td></tr>' % Vutil.htmlList(i.get_Concept()), file=o)
+            print('<tr><td>Description</td><td>%s</td></tr>' % Vutil.htmlList(i.get_Description()), file=o)
+            print('<tr><td>Name</td>             <td>%s</td></tr>' % Vutil.htmlList(i.get_Name()), file=o)
+            print('<tr><td>Reference</td>  <td>%s</td></tr>' % str(i.get_Reference()), file=o)
+            print('</table>', file=o)
+    print('<h3>Citations</h3>', file=o)
     cc = v.get_Citations()
     if cc:
         for c in cc.get_EventIVORN():
-            print>>o, '<ul>'
-            print>>o, '<li>%s with a %s</li>' % (c.get_valueOf_(), c.get_cite())
-            print>>o, '</ul>'
-    print>>o, '</html>'
+            print('<ul>', file=o)
+            print('<li>%s with a %s</li>' % (c.get_valueOf_(), c.get_cite()), file=o)
+            print('</ul>', file=o)
+    print('</html>', file=o)
 
 
 def format_to_stdout(infilename):
@@ -222,7 +221,7 @@ def main():
         format_to_file(infilename, outfilename, force)
     if text:
         content = format_to_string(infilename)
-        print content
+        print(content)
     if not stdout and outfilename is None and not text:
         usage()
 

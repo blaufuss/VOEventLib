@@ -5,7 +5,6 @@ Reads a VOEvent file and checks it for compliance
 See the VOEvent specification for details
 http://www.ivoa.net/Documents/latest/VOEvent.html
 """
-
 from VOEventLib.Vutil import *
 import sys
 
@@ -13,7 +12,7 @@ schema = ""
 if len(sys.argv) > 1:
     xmlString = open(sys.argv[1]).read()
 else:
-    print "Usage: python validate.py <filename> [<schemafile>]"
+    print("Usage: python validate.py <filename> [<schemafile>]")
     sys.exit(1)
 
 if len(sys.argv) > 2:
@@ -24,5 +23,5 @@ if len(schema) == 0:
 else:
     (success, message) = validate(xmlString, schema)
 
-print success
-print message
+print(success)
+print(message)

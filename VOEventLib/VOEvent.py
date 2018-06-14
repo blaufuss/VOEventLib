@@ -3,10 +3,8 @@
 #
 # Generated Thu Mar  1 14:50:05 2012 by generateDS.py version 2.1a.
 #
-
 import sys
 import getopt
-from string import lower as str_lower
 import re as re_
 
 etree_ = None
@@ -70,7 +68,7 @@ def parsexml_(*args, **kwargs):
 
 try:
     from generatedssuper import GeneratedsSuper
-except ImportError, exp:
+except ImportError as exp:
 
     class GeneratedsSuper(object):
         def format_string(self, input_data, input_name=''):
@@ -116,7 +114,7 @@ def showIndent(outfile, level):
         outfile.write('    ')
 
 def quote_xml(inStr):
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, str) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
@@ -124,7 +122,7 @@ def quote_xml(inStr):
     return s1
 
 def quote_attrib(inStr):
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, str) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
@@ -2353,8 +2351,11 @@ class Time(GeneratedsSuper):
         if self.unit is not None:
             outfile.write(' unit=%s' % (self.format_string(quote_attrib(self.unit).encode(ExternalEncoding), input_name='unit'), ))
     def exportChildren(self, outfile, level, namespace_='', name_='Time'):
-        for TimeInstant_ in self.TimeInstant:
-            TimeInstant_.export(outfile, level, namespace_, name_='TimeInstant')
+        for TimeInstant_ in [self.TimeInstant]:
+            if type(TimeInstant_)==list:
+                TimeInstant_[0].export(outfile, level, namespace_, name_='TimeInstant')
+            else:
+                TimeInstant_.export(outfile, level, namespace_, name_='TimeInstant')
         for Error_ in self.Error:
             showIndent(outfile, level)
             outfile.write('<%sError>%s</%sError>\n' % (namespace_, self.format_float(Error_, input_name='Error'), namespace_))
@@ -2415,7 +2416,7 @@ class Time(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.Error.append(fval_)
 # end class Time
@@ -2505,7 +2506,7 @@ class TimeInstant(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.TimeOffset = fval_
         elif nodeName_ == 'TimeScale':
@@ -2625,7 +2626,7 @@ class Position2D(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.Error2Radius = fval_
 # end class Position2D
@@ -2815,14 +2816,14 @@ class Value2(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.C1 = fval_
         elif nodeName_ == 'C2':
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.C2 = fval_
 # end class Value2
@@ -2909,21 +2910,21 @@ class Value3(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.C1 = fval_
         elif nodeName_ == 'C2':
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.C2 = fval_
         elif nodeName_ == 'C3':
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             self.C3 = fval_
 # end class Value3
@@ -3295,7 +3296,7 @@ class Why(GeneratedsSuper):
         if value is not None:
             try:
                 self.importance = float(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad float/double attribute (importance): %s' % exp)
         value = attrs.get('expires')
         if value is not None:
@@ -3765,7 +3766,7 @@ Usage: python <Parser>.py [ -s ] <in_xml_file>
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(1)
 
 
