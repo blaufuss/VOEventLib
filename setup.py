@@ -7,6 +7,7 @@ setup(
     author_email='roy.williams@ligo.org',
     maintainer='Min-A Cho',
     maintainer_email='min-a.cho@ligo.org',
+    license='GNU General Public License Version 3',
     description='Python library to read, modify, and create VOEvents',
     classifiers=(
         "Programming Language :: Python :: 3",
