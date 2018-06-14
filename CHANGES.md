@@ -2,6 +2,8 @@
 
 ## 1.1.dev0 (unreleased)
 
+-   Ported to Python 3 / Dropp Python 2 support entirely
+
 -   Project handed off to Min-A Cho
 
  

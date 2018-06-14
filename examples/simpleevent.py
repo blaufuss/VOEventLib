@@ -5,7 +5,6 @@ Builds a simple VOEvent packet from nothing
 See the VOEvent specification for details
 http://www.ivoa.net/Documents/latest/VOEvent.html
 """
-
 import sys
 from VOEventLib.VOEvent import *
 from VOEventLib.Vutil import *
@@ -30,4 +29,4 @@ v.set_What(what)
 schemaURL = "http://www.cacr.caltech.edu/~roy/VOEvent/VOEvent2-110220.xsd"
 
 s = stringVOEvent(v, schemaURL)
-print s
+print(s)

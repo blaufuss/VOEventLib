@@ -4,7 +4,6 @@ buildVOEvent: Creates a complex VOEvent with tables
 See the VOEvent specification for details
 http://www.ivoa.net/Documents/latest/VOEvent.html
 """
-
 from VOEventLib.VOEvent import *
 from VOEventLib.Vutil import *
 import sys, os
@@ -97,4 +96,4 @@ v.set_Citations(c)
 
 ############ output the event ############################
 xml = stringVOEvent(v)
-print xml
+print(xml)

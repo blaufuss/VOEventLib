@@ -1,5 +1,5 @@
 import sys
-import VOEvent
+from . import VOEvent
 
 class VOEventExportClass(VOEvent.VOEvent):
     def __init__(self, event, schemaURL):
@@ -30,7 +30,7 @@ class VOEventExportClass(VOEvent.VOEvent):
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 def stringVOEvent(event, schemaURL = "http://www.ivoa.net/xml/VOEvent/VOEvent-v2.0.xsd"):
     '''
@@ -57,7 +57,7 @@ def validate(xmlString, schema = "http://www.ivoa.net/xml/VOEvent/VOEvent-v2.0.x
     
         status =  xmlschema.assertValid(doc)
         return (1, "File is valid.")
-    except Exception, e:
+    except Exception as e:
         return (0, str(e))
 
 def paramValue(p):
@@ -115,7 +115,7 @@ def parseString(inString):
     '''
     Parses a string and builds the VOEvent DOM.
     '''
-    from StringIO import StringIO
+    from io import StringIO
     doc = VOEvent.parsexml_(StringIO(inString))
     rootNode = doc.getroot()
     rootTag, rootClass = VOEvent.get_root_tag(rootNode)
@@ -181,19 +181,19 @@ def makeWhereWhen(wwd):
     positionalError: positional error in degrees.
     '''
 
-    if not wwd.has_key('observatory'):     wwd['observatory'] = 'unknown'
-    if not wwd.has_key('coord_system'):    wwd['coord_system'] = 'UTC-FK5-GEO'
-    if not wwd.has_key('timeError'):       wwd['timeError'] = 0.0
-    if not wwd.has_key('positionalError'): wwd['positionalError'] = 0.0
+    if 'observatory' not in wwd:     wwd['observatory'] = 'unknown'
+    if 'coord_system' not in wwd:    wwd['coord_system'] = 'UTC-FK5-GEO'
+    if 'timeError' not in wwd:       wwd['timeError'] = 0.0
+    if 'positionalError' not in wwd: wwd['positionalError'] = 0.0
 
-    if not wwd.has_key('time'): 
-        print "Cannot make WhereWhen without time"
+    if 'time' not in wwd: 
+        print("Cannot make WhereWhen without time")
         return None
-    if not wwd.has_key('longitude'):
-        print "Cannot make WhereWhen without longitude"
+    if 'longitude' not in wwd:
+        print("Cannot make WhereWhen without longitude")
         return None
-    if not wwd.has_key('latitude'):
-        print "Cannot make WhereWhen without latitude"
+    if 'latitude' not in wwd:
+        print("Cannot make WhereWhen without latitude")
         return None
 
     ac = VOEvent.AstroCoords(coord_system_id=wwd['coord_system'])
@@ -238,7 +238,7 @@ def findParam(event, groupName, paramName):
     '''
     w = event.get_What()
     if not w:
-        print "No <What> section in the event!"
+        print("No <What> section in the event!")
         return None
     if groupName == '':
         for p in event.get_What().get_Param():
@@ -250,7 +250,7 @@ def findParam(event, groupName, paramName):
                 for p in event.get_What().get_Param():
                     if p.get_name() == paramName:
                         return p
-    print 'Cannot find param named %s/%s' % (groupName, paramName)
+    print('Cannot find param named %s/%s' % (groupName, paramName))
     return None
 
 ######## utilityTable ########################
@@ -328,7 +328,7 @@ class utilityTable(VOEvent.Table):
         if name in self.colNames:
             icol = self.colNames.index(name)
         else:
-            print>>out, "setTable: Unknown column name %s. Known list is %s" % (name, str(self.colNames))
+            print("setTable: Unknown column name %s. Known list is %s" % (name, str(self.colNames)), file=out)
             return False
 
         d = self.table.get_Data()
@@ -336,7 +336,7 @@ class utilityTable(VOEvent.Table):
         nrows = len(d.get_TR())
 
         if nrows <= irow:
-            print>>out, "setTable: not enough rows -- you want %d, table has %d. Use blankTable to allocate the table." % (irow+1, nrows)
+            print("setTable: not enough rows -- you want %d, table has %d. Use blankTable to allocate the table." % (irow+1, nrows), file=out)
             return False
 
         tr = d.get_TR()[irow]
