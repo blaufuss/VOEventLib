@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.dev1 (2018-06-20)
+
+-  Apply patch provided by Tanner Prestegard
+
+
 ## 1.1 (2018-06-14)
 
 -   Ported to Python 3 / Dropp Python 2 support entirely
