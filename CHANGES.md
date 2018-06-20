@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.dev1 (2018-06-20)
+## 1.2 (2018-06-20)
 
 -  Apply patch provided by Tanner Prestegard
 
