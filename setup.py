@@ -7,9 +7,12 @@ setup(
     author_email='roy.williams@ligo.org',
     maintainer='Min-A Cho',
     maintainer_email='min-a.cho@ligo.org',
-    license='GNU General Public License Version 3',
+    url='https://git.ligo.org/emfollow/VOEventLib',
     description='Python library to read, modify, and create VOEvents',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     classifiers=(
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
         "Topic :: Internet",
