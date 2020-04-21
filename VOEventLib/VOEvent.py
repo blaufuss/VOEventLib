@@ -102,7 +102,7 @@ except ImportError as exp:
 # Globals
 #
 
-ExternalEncoding = 'utf-8'
+#ExternalEncoding = 'utf-8'
 Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 
 #
