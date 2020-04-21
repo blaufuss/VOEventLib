@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='VOEventLib',
-    version='1.2',
+    version='1.3_dev',
     author='Roy D. Williams',
     author_email='roy.williams@ligo.org',
     maintainer='Min-A Cho',
