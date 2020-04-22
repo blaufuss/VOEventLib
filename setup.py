@@ -3,10 +3,6 @@ from setuptools import setup, find_packages
 setup(
     name='VOEventLib',
     version='1.3_dev',
-    author='Roy D. Williams',
-    author_email='roy.williams@ligo.org',
-    maintainer='Min-A Cho',
-    maintainer_email='min-a.cho@ligo.org',
     url='https://git.ligo.org/emfollow/VOEventLib',
     description='Python library to read, modify, and create VOEvents',
     long_description=open('README.md').read(),
